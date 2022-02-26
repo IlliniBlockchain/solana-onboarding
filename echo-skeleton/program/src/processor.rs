@@ -23,25 +23,7 @@ impl Processor {
         match instruction {
             EchoInstruction::Echo { data } => {
                 msg!("Instruction: Echo");
-                // Err(EchoError::NotImplemented.into())
-
-                // GET ACCOUNTS
-                let accounts_iter = &mut accounts.iter();
-                let echo_buffer = next_account_info(accounts_iter)?;
-
-                // GET LENGTH OF DATA
-                let data_len = echo_buffer.data_len();
-                msg!("data_len: {}", data_len);
-
-                // TODO: CHECK IF INPUT DATA IS LARGE ENOUGH
-
-                // FILL ECHO BUFFER ACCOUNT DATA WITH data
-                let mut echo_buffer_data = echo_buffer.try_borrow_mut_data()?;
-                for i in 0..data_len {
-                    echo_buffer_data[i] = data[i];
-                }
-
-                Ok(())
+                Err(EchoError::NotImplemented.into())
             }
             EchoInstruction::InitializeAuthorizedEcho {
                 buffer_seed,
@@ -54,10 +36,7 @@ impl Processor {
                 msg!("Instruction: AuthorizedEcho");
                 Err(EchoError::NotImplemented.into())
             }
-            EchoInstruction::InitializeVendingMachineEcho {
-                price,
-                buffer_size,
-            } => {
+            EchoInstruction::InitializeVendingMachineEcho { price, buffer_size } => {
                 msg!("Instruction: InitializeVendingMachineEcho");
                 Err(EchoError::NotImplemented.into())
             }
