@@ -9,39 +9,59 @@ use crate::instruction::EchoInstruction;
 
 pub struct Processor {}
 
+use solana_program::account_info::next_account_info;
+
 impl Processor {
     pub fn process_instruction(
-        _program_id: &Pubkey,
-        _accounts: &[AccountInfo],
+        program_id: &Pubkey,
+        accounts: &[AccountInfo],
         instruction_data: &[u8],
     ) -> ProgramResult {
         let instruction = EchoInstruction::try_from_slice(instruction_data)
             .map_err(|_| ProgramError::InvalidInstructionData)?;
 
         match instruction {
-            EchoInstruction::Echo { data: _ } => {
+            EchoInstruction::Echo { data } => {
                 msg!("Instruction: Echo");
-                Err(EchoError::NotImplemented.into())
+                // Err(EchoError::NotImplemented.into())
+
+                // GET ACCOUNTS
+                let accounts_iter = &mut accounts.iter();
+                let echo_buffer = next_account_info(accounts_iter)?;
+
+                // GET LENGTH OF DATA
+                let data_len = echo_buffer.data_len();
+                msg!("data_len: {}", data_len);
+
+                // TODO: CHECK IF INPUT DATA IS LARGE ENOUGH
+
+                // FILL ECHO BUFFER ACCOUNT DATA WITH data
+                let mut echo_buffer_data = echo_buffer.try_borrow_mut_data()?;
+                for i in 0..data_len {
+                    echo_buffer_data[i] = data[i];
+                }
+
+                Ok(())
             }
             EchoInstruction::InitializeAuthorizedEcho {
-                buffer_seed: _,
-                buffer_size: _,
+                buffer_seed,
+                buffer_size,
             } => {
                 msg!("Instruction: InitializeAuthorizedEcho");
                 Err(EchoError::NotImplemented.into())
             }
-            EchoInstruction::AuthorizedEcho { data: _ } => {
+            EchoInstruction::AuthorizedEcho { data } => {
                 msg!("Instruction: AuthorizedEcho");
                 Err(EchoError::NotImplemented.into())
             }
             EchoInstruction::InitializeVendingMachineEcho {
-                price: _,
-                buffer_size: _,
+                price,
+                buffer_size,
             } => {
                 msg!("Instruction: InitializeVendingMachineEcho");
                 Err(EchoError::NotImplemented.into())
             }
-            EchoInstruction::VendingMachineEcho { data: _ } => {
+            EchoInstruction::VendingMachineEcho { data } => {
                 msg!("Instruction: VendingMachineEcho");
                 Err(EchoError::NotImplemented.into())
             }

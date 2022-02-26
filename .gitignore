@@ -1,0 +1,4 @@
+echo-skeleton/js/node_modules
+echo-skeleton/js/package-lock.json
+echo-skeleton/program/target
+.DS_Store
